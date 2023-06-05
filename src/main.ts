@@ -20,14 +20,14 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TimeoutInterceptor());
 
   const options = new DocumentBuilder()
-    .setTitle('ILuveCoffee')
+    .setTitle('ILuvCoffee')
     .setDescription('Coffee application')
     .setVersion('1.0')
     .build();
 
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('api', app, document);
-    
+
   await app.listen(3000);
 }
 bootstrap();

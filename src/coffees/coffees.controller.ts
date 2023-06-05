@@ -2,11 +2,13 @@ import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Patch, Post
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto/update-coffee.dto';
-import { PaginationQueryDto } from 'src/common/dto/pagination-query-dto/pagination-query-dto';
+import { PaginationQueryDto } from '../common/dto/pagination-query-dto/pagination-query-dto';
 import { REQUEST } from '@nestjs/core';
-import { Public } from 'src/common/decorators/public.decorator';
-import { Protocol } from 'src/common/decorators/protocol.decorator';
+import { Public } from '../common/decorators/public.decorator';
+import { Protocol } from '../common/decorators/protocol.decorator';
+import { ApiForbiddenResponse, ApiTags } from '@nestjs/swagger'
 
+@ApiTags('coffees')
 @UsePipes(ValidationPipe)
 @Controller('coffees')
 export class CoffeesController {
@@ -16,9 +18,10 @@ export class CoffeesController {
         @Inject(REQUEST) private request: Request
     ) { }
     
+    @ApiForbiddenResponse({description: 'Forbidden.'})
     @Public()
     @Get()
-    async findAll(@Protocol('https') protocol: string, @Query() paginationQuery: PaginationQueryDto) {
+    findAll(@Protocol('https') protocol: string, @Query() paginationQuery: PaginationQueryDto) {
         //await new Promise(resolve => setTimeout(resolve, 5000)); // testing for timeout
         console.log(protocol);
         return this.coffeeService.findAll(paginationQuery);
